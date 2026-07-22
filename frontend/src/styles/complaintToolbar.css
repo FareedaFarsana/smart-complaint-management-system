@@ -1,0 +1,73 @@
+.complaint-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    flex-wrap:wrap;
+}
+
+.complaint-toolbar input{
+
+    flex:1;
+
+    min-width:250px;
+
+    padding:12px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline: none;
+}
+
+.complaint-toolbar input:focus{
+    border-color:#6366f1;
+    box-shadow:0 0 0 4px rgba(99,102,241,.15);
+}
+
+.complaint-toolbar select{
+
+    padding:12px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    background:white;
+}
+
+.complaint-toolbar button{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#4F46E5;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.complaint-toolbar button:hover{
+
+    background:#4338CA;
+}

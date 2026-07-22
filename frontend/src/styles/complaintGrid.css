@@ -1,0 +1,71 @@
+.complaint-grid{
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    border:1px solid #e2e8f0;
+}
+
+.complaint-grid table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.complaint-grid thead{
+
+    background:#f8fafc;
+}
+
+.complaint-grid th{
+
+    padding:16px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#475569;
+
+    border-bottom:1px solid #e2e8f0;
+}
+
+.complaint-grid td{
+
+    padding:16px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    color:#334155;
+
+    font-size:14px;
+}
+
+.complaint-grid tbody tr{
+
+    transition:.25s;
+}
+
+.complaint-grid tbody tr:hover{
+
+    background:#f8fafc;
+}
+
+.empty-state{
+
+    text-align:center;
+
+    padding:40px;
+
+    color:#94a3b8;
+
+    font-style:italic;
+}

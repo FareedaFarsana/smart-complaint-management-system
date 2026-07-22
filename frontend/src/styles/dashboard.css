@@ -1,0 +1,48 @@
+.dashboard{
+
+    padding:30px;
+}
+
+.dashboard h1{
+
+    margin-bottom:25px;
+
+    color:#1e293b;
+}
+
+.dashboard-cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-bottom:35px;
+}
+
+.loading-state,
+.error-state{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:60vh;
+
+    font-size:22px;
+
+    font-weight:600;
+}
+
+.loading-state{
+
+    color:#6366f1;
+}
+
+.error-state{
+
+    color:#dc2626;
+}
