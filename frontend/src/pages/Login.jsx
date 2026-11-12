@@ -41,6 +41,8 @@ function Login() {
                 }
             );
 
+            console.log("Login response:", response.data);
+
             localStorage.setItem(
                 "access",
                 response.data.access

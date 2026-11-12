@@ -18,6 +18,15 @@ class Complaint(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    assigned_staff = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_complaints'
+    )
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='complaints')
 
     title = models.CharField(max_length=200)

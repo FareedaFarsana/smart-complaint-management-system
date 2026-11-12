@@ -7,6 +7,8 @@ import { FiArrowRight } from "react-icons/fi";
 // helper function
 function formatDate(dateString) {
 
+    
+
     const date = new Date(dateString);
 
     const today = new Date();
@@ -31,7 +33,7 @@ function formatDate(dateString) {
 
 }
 
-function RecentComplaintsTable({ complaints }) { 
+function RecentComplaintsTable({ complaints, profile }) { 
 
     const navigate = useNavigate();
 
@@ -41,8 +43,20 @@ function RecentComplaintsTable({ complaints }) {
             <div className="table-header">
 
                 <div className="table-title">
-                    <h2>Recent Complaints</h2>
-                    <p>Latest complaints submitted by users</p>
+                    <h2>
+                        {profile?.role === "ADMIN"
+                            ? "Recent Complaints"
+                            : profile?.role === "STAFF"
+                            ? "Recent Assigned Complaints"
+                            : "My Recent Complaints"}
+                    </h2>
+                    <p>
+                        {profile?.role === "ADMIN"
+                            ? "Latest complaints across the system"
+                            : profile?.role === "STAFF"
+                            ? "Your assigned complaints and their latest updates"
+                            : "Your submitted complaints and their latest updates"}
+                    </p>
                 </div>
 
                 <button className="view-all-btn" onClick={() => navigate("/complaints")}>

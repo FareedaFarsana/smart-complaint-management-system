@@ -72,3 +72,38 @@
 
     background:#b91c1c;
 }
+
+/* spinner */
+.spinner{
+
+    width:16px;
+
+    height:16px;
+
+    border:2px solid rgba(255,255,255,.4);
+
+    border-top:2px solid #fff;
+
+    border-radius:50%;
+
+    display:inline-block;
+
+    margin-right:8px;
+
+    animation:spin .7s linear infinite;
+
+    vertical-align:middle;
+
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}

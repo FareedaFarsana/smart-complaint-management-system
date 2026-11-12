@@ -11,6 +11,20 @@ class NotificationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(
+
+        notifications = Notification.objects.filter(
             user=self.request.user
         ).order_by('-created_at')
+
+        print("CURRENT USER:", self.request.user)
+        print("NOTIFICATION COUNT:", notifications.count())
+        print("NOTIFICATIONS:", list(
+            notifications.values(
+                'id',
+                'user_id',
+                'message',
+                'is_read'
+            )
+        ))
+
+        return notifications

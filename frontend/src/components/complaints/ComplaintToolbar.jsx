@@ -54,10 +54,6 @@ function ComplaintToolbar({
                 placeholder="All Status"
             />
 
-            <button>
-                + Raise Complaint
-            </button>
-
         </div>
   )
 }

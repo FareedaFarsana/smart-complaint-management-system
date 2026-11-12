@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 
     'users',
     'complaints',
@@ -107,8 +108,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
+    # Require passwords to be at least 12 characters long
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        },
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -151,4 +156,24 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ]
+}
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    # Access token expires after 15 minutes
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+
+    # Refresh token expires after 1 day
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+
+    # Issue a new refresh token when refreshing
+    "ROTATE_REFRESH_TOKENS": True,
+
+    # Blacklist the old refresh token after rotation
+    "BLACKLIST_AFTER_ROTATION": True,
+
+    # Use Bearer tokens in API requests
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }

@@ -27,7 +27,11 @@ function DashboardCard({
 
                 <h3>{title}</h3>
 
-                <p>Total {title}</p>
+                <p>
+                    {title === "Total Complaints"
+                        ? "All submitted complaints"
+                        : `Total ${title}`}
+                </p>
 
             </div>
 

@@ -9,7 +9,9 @@ function Button({
 
   variant = "primary",
 
-  disabled = false
+  disabled = false,
+
+  loading = false
 
 }) {
   return (
@@ -21,11 +23,13 @@ function Button({
 
             onClick={onClick}
 
-            disabled={disabled}
+            disabled={disabled || loading}
 
         >
 
-            {children}
+            {loading && <span className="spinner"></span>}
+
+            {loading ? "Submitting..." : children}
 
     </button>
 

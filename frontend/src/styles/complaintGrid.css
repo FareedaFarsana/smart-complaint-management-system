@@ -1,10 +1,11 @@
 .complaint-grid{
+    margin-top: 24px;
 
     background:#ffffff;
 
     border-radius:16px;
 
-    overflow:hidden;
+    overflow-x: auto;
 
     box-shadow:0 10px 30px rgba(0,0,0,.08);
 
@@ -14,6 +15,8 @@
 .complaint-grid table{
 
     width:100%;
+
+    min-width: 800px;
 
     border-collapse:collapse;
 }
@@ -29,13 +32,17 @@
 
     text-align:left;
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:600;
 
     color:#475569;
 
     border-bottom:1px solid #e2e8f0;
+
+    letter-spacing: 0.3px;
+
+    text-transform: uppercase;
 }
 
 .complaint-grid td{
@@ -48,6 +55,52 @@
 
     font-size:14px;
 }
+
+/* Assigned Staff dropdown */
+.complaint-grid td select {
+    width: 120px;
+    max-width: 100%;
+    padding: 9px 30px 9px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #374151;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Dropdown focus */
+.complaint-grid td select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Dropdown hover */
+.complaint-grid td select:hover:not(:disabled) {
+    border-color: #818cf8;
+}
+
+/* Dropdown while assigning */
+.complaint-grid td select:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Responsive dropdown */
+@media (max-width: 768px) {
+    .complaint-grid td select {
+        width: 110px;
+        font-size: 12px;
+        padding: 8px 24px 8px 8px;
+    }
+}
+
 
 .complaint-grid tbody tr{
 
@@ -68,4 +121,203 @@
     color:#94a3b8;
 
     font-style:italic;
+}
+
+
+.complaint-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.complaint-modal-content {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 22px;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #ef4444;
+}
+
+.complaint-details {
+    padding: 24px;
+}
+
+.complaint-details p {
+    margin: 0 0 16px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.complaint-details strong {
+    display: inline-block;
+    min-width: 120px;
+    color: #1e293b;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.detail-row strong {
+    min-width: 120px;
+}
+
+.detail-image {
+    margin-top: 20px;
+}
+
+.detail-image strong {
+    display: block;
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.detail-image img {
+    width: 100%;
+    max-width: 400px;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+    margin-top: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* edit */
+.edit-field {
+    margin-bottom: 20px;
+}
+
+.edit-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.edit-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.edit-field input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.edit-field select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #334155;
+    background: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.edit-field select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.edit-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #334155;
+    background: #fff;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.edit-field textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* edit btn */
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.save-btn {
+    background: #4f46e5;
+    color: #fff;
+}
+
+.save-btn:hover {
+    background: #4338ca;
+}
+
+.cancel-btn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.cancel-btn:hover {
+    background: #cbd5e1;
 }

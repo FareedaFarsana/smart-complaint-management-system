@@ -8,8 +8,6 @@ import Swal from "sweetalert2";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function Register() {
-    const [institutionName, setInstitutionName] = useState("");
-    const [institutionType, setInstitutionType] = useState("");
     const [designation, setDesignation] = useState("");
     const [phone, setPhone] = useState("");
 
@@ -19,6 +17,15 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const designationOptions = [
+        { value: "STUDENT", label: "Student" },
+        { value: "FACULTY", label: "Faculty" },
+        { value: "ADMIN_STAFF", label: "Administrative Staff" },
+        { value: "TECHNICAL_STAFF", label: "Technical Staff" },
+        { value: "MAINTENANCE_STAFF", label: "Maintenance Staff" },
+        { value: "OTHER", label: "Other" }
+    ];
+
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
@@ -26,8 +33,6 @@ function Register() {
         e.preventDefault();
 
         if (
-            !institutionName ||
-            !institutionType ||
             !designation ||
             !phone ||
             !username ||
@@ -48,10 +53,6 @@ function Register() {
 
             await api.post("users/register/", {
 
-                institution_name: institutionName,
-
-                institution_type: institutionType,
-
                 designation,
 
                 phone,
@@ -67,7 +68,7 @@ function Register() {
             Swal.fire({
                 icon: "success",
                 title: "Registration Successful",
-                text: "Your institution account has been created successfully.",
+                text: "Your account has been created successfully.",
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -101,48 +102,10 @@ function Register() {
 
             <h1>Smart Institution Complaint Portal</h1>
             <p>
-                Create your institution account to manage and track complaints efficiently.
+                Create your account to access the complaint management portal.
             </p>    
 
             <form onSubmit={handleRegister}>
-
-                <input
-                    className="full-width"
-                    type="text"
-                    placeholder="Enter institution name"
-                    value={institutionName}
-                    onChange={(e) => setInstitutionName(e.target.value)}
-                />
-
-                <select
-                    required
-                    value={institutionType}
-                    onChange={(e) => setInstitutionType(e.target.value)}
-                >
-                    <option value="">Select Institution Type</option>
-                    <option value="School">School</option>
-                    <option value="College">College</option>
-                    <option value="University">University</option>
-                    <option value="Hospital">Hospital</option>
-                    <option value="Office">Office</option>
-                    <option value="Government">Government</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <input
-                    type="text"
-                    placeholder="Enter designation"
-                    value={designation}
-                    onChange={(e) => setDesignation(e.target.value)}
-                />
-
-                <input
-                    type="tel"
-                    placeholder="Enter phone number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                />
-
                 <input
                     type="text"
                     placeholder="Enter username"
@@ -175,6 +138,26 @@ function Register() {
                     </span>
 
                 </div>
+
+                <select
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                >
+                    <option value="">Select designation</option>
+
+                    {designationOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+
+                <input
+                    type="tel"
+                    placeholder="Enter phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                />
 
                 <button type="submit" disabled={loading}>
                     {loading ? "Creating Account..." : "Create Account"}
