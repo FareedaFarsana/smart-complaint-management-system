@@ -1,0 +1,278 @@
+
+.deadline-page {
+    padding: 25px;
+    background: #f5f8fc;
+    min-height: 100vh;
+}
+
+.deadline-header {
+    margin-bottom: 25px;
+}
+
+.deadline-header h2 {
+    color: #1e3a5f;
+    margin-bottom: 6px;
+}
+
+.deadline-header p {
+    color: #64748b;
+}
+
+.deadline-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.deadline-card {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5edf5;
+}
+
+.deadline-card h4 {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.deadline-card h2 {
+    color: #1e40af;
+    font-size: 28px;
+}
+
+.deadline-alert {
+    background: #fff1f0;
+    border-left: 4px solid #dc2626;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    color: #991b1b;
+}
+
+.deadline-alert p {
+    margin-top: 5px;
+}
+
+.deadline-table-section {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #e5edf5;
+}
+
+.deadline-table-section h3 {
+    color: #1e3a5f;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .deadline-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .deadline-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.deadline-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.deadline-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.deadline-table th,
+.deadline-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5edf5;
+    font-size: 14px;
+}
+
+.deadline-table th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+}
+
+.deadline-table td {
+    color: #475569;
+}
+
+.deadline-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.deadline-priority,
+.deadline-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.deadline-priority.low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.deadline-priority.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.deadline-priority.high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.deadline-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.deadline-status.in-progress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.deadline-status.resolved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+/* Deadline Edit Button */
+.deadline-edit-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.deadline-edit-btn:hover {
+    background: #1d4ed8;
+}
+
+/* Modal Background */
+.deadline-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+/* Modal */
+.deadline-modal {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+.deadline-modal h3 {
+    color: #1e3a5f;
+    margin-bottom: 12px;
+}
+
+.deadline-modal p {
+    color: #64748b;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+.deadline-modal label {
+    display: block;
+    color: #334155;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.deadline-modal input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 14px;
+    margin-bottom: 22px;
+    box-sizing: border-box;
+}
+
+.deadline-modal input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.deadline-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.deadline-cancel-btn,
+.deadline-save-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.deadline-cancel-btn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.deadline-save-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.deadline-save-btn:disabled,
+.deadline-cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.deadline-escalated-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.deadline-not-escalated {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 600;
+}

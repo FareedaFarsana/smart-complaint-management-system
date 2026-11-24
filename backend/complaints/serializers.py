@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Complaint
+from .models import Complaint, Feedback, ComplaintStatusHistory
 
 
 class ComplaintSerializer(serializers.ModelSerializer):
@@ -18,7 +18,12 @@ class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = "__all__"
-        read_only_fields = ["user", "created_at"]
+        read_only_fields = [
+            "user",
+            "created_at",
+            "is_escalated",
+            "escalated_at"
+        ]
 
     def validate(self, attrs):
         request = self.context.get("request")
@@ -65,3 +70,51 @@ class ComplaintSerializer(serializers.ModelSerializer):
                 )
 
         return attrs
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.CharField(
+        source="user.username",
+        read_only=True
+    )
+
+    class Meta:
+        model = Feedback
+        fields = "__all__"
+        read_only_fields = ["user", "created_at"]
+
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError(
+                "Rating must be between 1 and 5."
+            )
+        return value
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        complaint = attrs.get("complaint")
+
+        if complaint.status != "Resolved":
+            raise serializers.ValidationError(
+                "Feedback can only be submitted for resolved complaints."
+            )
+
+        if request and complaint.user != request.user:
+            raise serializers.ValidationError(
+                "You can submit feedback only for your own complaints."
+            )
+
+        return attrs
+
+class ComplaintStatusHistorySerializer(serializers.ModelSerializer):
+
+    changed_by_name = serializers.CharField(
+        source="changed_by.username",
+        read_only=True
+    )
+
+    class Meta:
+        model = ComplaintStatusHistory
+        fields = "__all__"
+    

@@ -8,6 +8,9 @@ import CreateComplaint from "./pages/CreateComplaint";
 import Notifications from "./pages/Notifications";
 import AdminUsers from "./pages/AdminUsers";
 import Profile from "./pages/Profile";
+import Feedback from "./pages/Feedback";
+import ComplaintTimeline from "./pages/ComplaintTimeline";
+import DeadlineManagement from "./pages/DeadlineManagement";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -40,6 +43,12 @@ function App() {
           <Route path="/admin/users" element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminUsers/></ProtectedRoute>}/>
 
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+
+          <Route path="/feedback" element={<ProtectedRoute allowedRoles={["ADMIN", "USER"]}><Feedback /> </ProtectedRoute> } />
+
+          <Route path="/complaint-timeline" element={<ProtectedRoute allowedRoles={["USER"]}><ComplaintTimeline /></ProtectedRoute> }/>
+
+          <Route path="/admin/deadlines" element={<ProtectedRoute allowedRoles={["ADMIN"]}><DeadlineManagement /></ProtectedRoute>}/>
 
         </Routes>
       </BrowserRouter>

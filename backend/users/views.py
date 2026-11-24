@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import render
 from rest_framework.generics import CreateAPIView
 from django.contrib.auth.models import User
@@ -114,6 +116,19 @@ class UpdateMyProfileView(APIView):
 
         email = email.strip()
         phone = phone.strip()
+
+        # Validate Indian mobile number
+        pattern = r'^[6-9]\d{9}$'
+
+        if not re.fullmatch(pattern, phone):
+            return Response(
+                {
+                    "phone": [
+                        "Enter a valid 10-digit Indian mobile number."
+                    ]
+                },
+                status=400
+            )
 
         if not email:
             return Response(

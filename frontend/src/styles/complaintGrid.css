@@ -92,6 +92,184 @@
     opacity: 0.8;
 }
 
+
+/* Feedback Action */
+.feedback-action {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 18px 24px;
+    margin-top: 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+.feedback-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-btn:hover {
+    background: #1d4ed8;
+}
+
+.feedback-submitted-btn {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* Feedback Form */
+
+
+
+.feedback-field {
+    margin-bottom: 20px;
+}
+
+.feedback-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+/* Star Rating */
+.star-rating {
+    display: flex;
+    gap: 8px;
+}
+
+.star-rating span {
+    transition: transform 0.2s ease;
+}
+
+.star-rating span:hover {
+    transform: scale(1.2);
+}
+
+/* Service Experience */
+.experience-rating {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.experience-rating button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 5px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.experience-rating button:hover,
+.experience-rating button.experience-selected {
+    border-color: var(--primary-color, #2563eb);
+    background: #eff6ff;
+}
+
+.experience-rating button span {
+    font-size: 25px;
+}
+
+.experience-rating button small {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* Comments */
+.feedback-field textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.feedback-field textarea:focus {
+    border-color: var(--primary-color, #2563eb);
+}
+
+/* Submit Button */
+.feedback-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color, #2563eb);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.feedback-submit-btn:hover {
+    opacity: 0.9;
+}
+
+.feedback-modal-content {
+    max-width: 650px;
+    width: 90%;
+    padding: 30px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.feedback-modal-content .star-rating {
+    margin-top: 12px;
+    gap: 10px;
+}
+
+.feedback-modal-content .feedback-field {
+    margin-bottom: 22px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .feedback-form {
+        padding: 15px;
+    }
+
+    .experience-rating {
+        gap: 4px;
+    }
+
+    .experience-rating button {
+        padding: 9px 2px;
+    }
+
+    .experience-rating button small {
+        font-size: 9px;
+    }
+}
+
 /* Responsive dropdown */
 @media (max-width: 768px) {
     .complaint-grid td select {
@@ -135,15 +313,6 @@
     z-index: 1000;
 }
 
-.complaint-modal-content {
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-}
 
 .modal-header {
     display: flex;
@@ -171,14 +340,24 @@
     color: #ef4444;
 }
 
+.complaint-modal-content {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
 .complaint-details {
-    padding: 24px;
+    padding: 16px 24px;
 }
 
 .complaint-details p {
-    margin: 0 0 16px;
+    margin: 0 0 10px;
     color: #475569;
-    line-height: 1.6;
+    line-height: 1.4;
 }
 
 .complaint-details strong {
@@ -210,14 +389,13 @@
 
 .detail-image img {
     width: 100%;
-    max-width: 400px;
-    max-height: 300px;
+    max-width: 300px;
+    max-height: 150px;
     object-fit: contain;
     display: block;
-    margin-top: 12px;
-    border-radius: 12px;
+    margin-top: 8px;
+    border-radius: 10px;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* edit */
@@ -320,4 +498,92 @@
 
 .cancel-btn:hover {
     background: #cbd5e1;
+}
+
+
+/* Feedback Modal */
+.feedback-modal-content {
+    width: 90%;
+    max-width: 650px;
+    padding: 30px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.feedback-modal-content > p {
+    padding: 0 0 16px;
+    margin: 0 30px 22px;
+    color: #64748b;
+    font-size: 14px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.feedback-modal-content .feedback-field {
+    margin: 0 30px 22px;
+}
+
+.feedback-modal-content .star-rating {
+    margin-top: 12px;
+    gap: 10px;
+}
+
+.feedback-modal-content .feedback-submit-btn {
+    width: calc(100% - 60px);
+    margin: 5px 30px 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .feedback-modal-content {
+        width: 100%;
+        padding: 18px 10px;
+    }
+
+    .feedback-modal-content > p,
+    .feedback-modal-content .feedback-field {
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    .feedback-modal-content .feedback-submit-btn {
+        width: calc(100% - 24px);
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    .experience-rating {
+        gap: 4px;
+    }
+
+    .experience-rating button {
+        padding: 9px 2px;
+    }
+
+    .experience-rating button small {
+        font-size: 9px;
+    }
+}
+
+/* Better Complaint Details Modal Layout */
+.complaint-modal-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Only complaint details should scroll */
+.complaint-details {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Keep feedback button visible */
+.feedback-action {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    z-index: 2;
 }

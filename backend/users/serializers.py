@@ -1,3 +1,4 @@
+import re
 
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
@@ -39,6 +40,16 @@ class RegisterSerializer(serializers.ModelSerializer):
                 "An account with this email already exists."
             )
         return value.strip()
+
+    def validate_phone(self, value):
+        pattern = r'^[6-9]\d{9}$'
+
+        if not re.match(pattern, value):
+            raise serializers.ValidationError(
+                "Enter a valid 10-digit Indian mobile number."
+            )
+
+        return value
 
     def create(self, validated_data):
         designation = validated_data.pop("designation")

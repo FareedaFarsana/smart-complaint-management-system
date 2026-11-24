@@ -17,22 +17,27 @@ function AdminUsers() {
     const [editRole, setEditRole] = useState("");
     const [editDesignation, setEditDesignation] = useState("");
     const [saving, setSaving] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
 
-    const totalUsers = users.length;
+    // Exclude ADMIN accounts
+    const managedUsers = users.filter(
+        (user) =>
+            user.role === "STAFF" ||
+            user.role === "USER"
+    );
 
-    const adminCount = users.filter(
-        (user) => user.role === "ADMIN"
-    ).length;
+    // Statistics
+    const totalUsers = managedUsers.length;
 
-    const staffCount = users.filter(
+    const staffCount = managedUsers.filter(
         (user) => user.role === "STAFF"
     ).length;
 
-    const regularUserCount = users.filter(
+    const regularUserCount = managedUsers.filter(
         (user) => user.role === "USER"
     ).length;
 
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = managedUsers.filter((user) => {
         const searchText = search.toLowerCase();
 
         const matchesSearch =
@@ -53,9 +58,17 @@ function AdminUsers() {
 
     const fetchUsers = async () => {
         try {
-            const response = await api.get("users/admin-users/");
-            console.log("Admin users:", response.data);
-            setUsers(response.data);
+            const [usersResponse, profileResponse] = await Promise.all([
+                api.get("users/admin-users/"),
+                api.get("users/me/")
+            ]);
+
+            console.log("Current logged-in user:", profileResponse.data);
+            console.log("All users:", usersResponse.data);
+
+            setUsers(usersResponse.data);
+            setCurrentUser(profileResponse.data);
+
         } catch (error) {
             console.log("Failed to fetch users:", error);
         } finally {
@@ -117,16 +130,11 @@ function AdminUsers() {
     
         </div>
 
-        <div className="user-summary">
+       <div className="user-summary">
 
             <div className="summary-card">
-                <span>Total Users</span>
+                <span>Total Managed Users</span>
                 <h2>{totalUsers}</h2>
-            </div>
-
-            <div className="summary-card">
-                <span>Admins</span>
-                <h2>{adminCount}</h2>
             </div>
 
             <div className="summary-card">
@@ -139,7 +147,7 @@ function AdminUsers() {
                 <h2>{regularUserCount}</h2>
             </div>
 
-        </div>
+        </div> 
 
         <div className="user-tools">
 
@@ -154,8 +162,7 @@ function AdminUsers() {
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
             >
-                <option value="">All Roles</option>
-                <option value="ADMIN">Admin</option>
+                <option value="">All Managed Users</option>
                 <option value="STAFF">Staff</option>
                 <option value="USER">Regular Users</option>
             </select>
@@ -201,10 +208,12 @@ function AdminUsers() {
                                         {user.role ?? "Not assigned"}
                                     </span>
                                 </td>
-                                {(user.designation ?? "Not assigned")
-                                    .replaceAll("_", " ")
-                                    .toLowerCase()
-                                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                                <td>
+                                    {(user.designation ?? "Not assigned")
+                                        .replaceAll("_", " ")
+                                        .toLowerCase()
+                                        .replace(/\b\w/g, (char) => char.toUpperCase())}
+                                </td>
                                 <td>{user.phone}</td>
                                 <td>{user.institution}</td>
 
@@ -320,28 +329,44 @@ function AdminUsers() {
                         </p>
 
                         <label>Role</label>
-
-                        <select 
+                        <select
                             value={editRole}
-                            onChange={(e)=> setEditRole(e.target.value)}
-                        >    
+                            onChange={(e) => {
+                                const selectedRole = e.target.value;
+
+                                setEditRole(selectedRole);
+
+                                // Set default designation based on role
+                                if (selectedRole === "STAFF") {
+                                    setEditDesignation("FACULTY");
+                                } else if (selectedRole === "USER") {
+                                    setEditDesignation("STUDENT");
+                                }
+                            }}
+                        >
                             <option value="USER">User</option>
                             <option value="STAFF">Staff</option>
-                            <option value="ADMIN">Admin</option>
                         </select>
 
                         <label>Designation</label>
-
-                        <select 
+                        <select
                             value={editDesignation}
-                            onChange={(e)=> setEditDesignation(e.target.value)}
+                            onChange={(e) => setEditDesignation(e.target.value)}
                         >
-                            <option value="STUDENT">Student</option>
-                            <option value="FACULTY">Faculty</option>
-                            <option value="ADMIN_STAFF">Administrative Staff</option>
-                            <option value="TECHNICAL_STAFF">Technical Staff</option>
-                            <option value="MAINTENANCE_STAFF">Maintenance Staff</option>
-                            <option value="OTHER">Other</option>
+                            {editRole === "STAFF" ? (
+                                <>
+                                    <option value="FACULTY">Faculty</option>
+                                    <option value="ADMIN_STAFF">Administrative Staff</option>
+                                    <option value="TECHNICAL_STAFF">Technical Staff</option>
+                                    <option value="MAINTENANCE_STAFF">Maintenance Staff</option>
+                                    <option value="OTHER">Other</option>
+                                </>
+                            ) : (
+                                <>
+                                    <option value="STUDENT">Student</option>
+                                    <option value="OTHER">Other</option>
+                                </>
+                            )}
                         </select>
 
                         <div className="edit-actions">

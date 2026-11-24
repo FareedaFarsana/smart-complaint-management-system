@@ -1,88 +1,110 @@
+
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-import {
-    MdDashboard
-} from "react-icons/md"; 
+import { MdDashboard } from "react-icons/md";
 
 import {
     FaClipboardList,
     FaPlusCircle,
-    FaUserCircle
+    FaUserCircle,
+    FaStar,
+    FaHistory,
+    FaClock
 } from "react-icons/fa";
 
-import {
-    IoNotifications
-} from "react-icons/io5";
-
-import {
-    FiLogOut
-} from "react-icons/fi";
+import { IoNotifications } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
 
 import { NavLink } from "react-router-dom";
 
 import "../styles/sidebar.css";
 
-function Sidebar({isOpen}) {
+function Sidebar({ isOpen, onClose }) {
 
     const [profile, setProfile] = useState(null);
 
     useEffect(() => {
-    const fetchProfile = async () => {
-        try {
-        const response = await api.get("users/me/");
-        setProfile(response.data);
-        } catch (error) {
-        console.error("Failed to fetch profile:", error);
-        }
-    };
+        const fetchProfile = async () => {
+            try {
+                const response = await api.get("users/me/");
+                setProfile(response.data);
+            } catch (error) {
+                console.error("Failed to fetch profile:", error);
+            }
+        };
 
-    fetchProfile();
+        fetchProfile();
     }, []);
 
-  return (
+    const isAdmin = profile?.role === "ADMIN";
+    const isUser = profile?.role === "USER";
 
-    <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
+    return (
+        <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
 
             <div className="sidebar-logo">
-
                 <h2>SCMS</h2>
-
-                <span>Complaint System</span>
-
+                <span>Complaint Management System</span>
             </div>
 
             <nav>
 
-                <NavLink to="/dashboard" onClick={onclose}>
+                <NavLink to="/dashboard" onClick={onClose}>
                     <MdDashboard />
                     Dashboard
                 </NavLink>
 
-                {/* Show this link only for ADMIN users */}
-                {profile?.role === "ADMIN" && (
-                    <NavLink to="/admin/users">
+                {/* Admin only */}
+                {isAdmin && (
+                    <NavLink to="/admin/users" onClick={onClose}>
                         <FaUserCircle />
-                        Admin Users
+                        Manage Users
                     </NavLink>
                 )}
 
-                <NavLink to="/complaints">
+                {/* Admin only */}
+                {isAdmin && (
+                    <NavLink to="/admin/deadlines" onClick={onClose}>
+                        <FaClock />
+                        Deadline Management
+                    </NavLink>
+                )}
+
+                <NavLink to="/complaints" onClick={onClose}>
                     <FaClipboardList />
-                    Complaints
+                    All Complaints
                 </NavLink>
 
-                <NavLink to="/create">
-                    <FaPlusCircle />
-                    New Complaint
-                </NavLink>
+                {isUser && (
+                    <NavLink to="/complaint-timeline" onClick={onClose}>
+                        <FaHistory />
+                        Complaint Timeline
+                    </NavLink>
+                )}
 
-                <NavLink to="/notifications">
+                {/* Admin and Student */}
+                {(isAdmin || isUser) && (
+                    <NavLink to="/feedback" onClick={onClose}>
+                        <FaStar />
+                        Feedback
+                    </NavLink>
+                )}
+
+                {/* Only regular users */}
+                {isUser && (
+                    <NavLink to="/create" onClick={onClose}>
+                        <FaPlusCircle />
+                        New Complaint
+                    </NavLink>
+                )}
+
+                <NavLink to="/notifications" onClick={onClose}>
                     <IoNotifications />
                     Notifications
                 </NavLink>
 
-                <NavLink to="/profile">
+                <NavLink to="/profile" onClick={onClose}>
                     <FaUserCircle />
                     Profile
                 </NavLink>
@@ -92,19 +114,22 @@ function Sidebar({isOpen}) {
             <div className="sidebar-bottom">
 
                 <div className="sidebar-profile">
-                <div className="sidebar-profile-avatar">
-                    <FaUserCircle />
-                </div>
 
-                <div className="sidebar-profile-info">
-                    <strong>{profile?.username || "Loading..."}</strong>
-                    <span>{profile?.role || "Loading..."}</span>
-                </div>
+                    <div className="sidebar-profile-avatar">
+                        <FaUserCircle />
+                    </div>
+
+                    <div className="sidebar-profile-info">
+                        <strong>{profile?.username || "Loading..."}</strong>
+                        <span>{profile?.role || "Loading..."}</span>
+                    </div>
+
                 </div>
 
                 <button
                     className="logout-btn"
                     onClick={async () => {
+
                         const refreshToken = localStorage.getItem("refresh");
 
                         try {
@@ -129,8 +154,7 @@ function Sidebar({isOpen}) {
             </div>
 
         </aside>
-
-  )
+    );
 }
 
-export default Sidebar
+export default Sidebar;

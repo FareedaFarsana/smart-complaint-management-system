@@ -39,12 +39,10 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 
 
-
 class AdminUserUpdateSerializer(serializers.ModelSerializer):
 
     role = serializers.ChoiceField(
         choices=[
-            ("ADMIN", "Admin"),
             ("STAFF", "Staff"),
             ("USER", "User"),
         ],
@@ -74,14 +72,67 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "username", "email"]
 
+    def validate(self, attrs):
+
+        profile_data = attrs.get("userprofile", {})
+
+        current_profile = self.instance.userprofile
+
+        role = profile_data.get("role", current_profile.role)
+
+        designation = profile_data.get(
+            "designation",
+            current_profile.designation
+        )
+
+        # Prevent editing ADMIN accounts
+        if current_profile.role == "ADMIN":
+            raise serializers.ValidationError(
+                "Admin accounts cannot be modified here."
+            )
+
+        # Validate USER designation
+        if role == "USER":
+            allowed_designations = ["STUDENT", "OTHER"]
+
+            if designation not in allowed_designations:
+                raise serializers.ValidationError({
+                    "designation": "Users can only have Student or Other designation."
+                })
+
+        # Validate STAFF designation
+        elif role == "STAFF":
+            allowed_designations = [
+                "FACULTY",
+                "ADMIN_STAFF",
+                "TECHNICAL_STAFF",
+                "MAINTENANCE_STAFF",
+                "OTHER",
+            ]
+
+            if designation not in allowed_designations:
+                raise serializers.ValidationError({
+                    "designation": "Staff must have a valid staff designation."
+                })
+
+        return attrs
+
     def update(self, instance, validated_data):
+
         profile_data = validated_data.pop("userprofile", {})
+
         profile = instance.userprofile
 
         profile.role = profile_data.get("role", profile.role)
+
         profile.designation = profile_data.get(
-            "designation", profile.designation
+            "designation",
+            profile.designation
         )
 
         profile.save()
+
         return instance
+
+
+    

@@ -17,6 +17,14 @@ function ComplaintGrid({
 
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     const [editingComplaint, setEditingComplaint] = useState(null);
+    const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+    const [feedbackData, setFeedbackData] = useState({
+        rating: 0,
+        service_experience: 0,
+        comments: ""
+    });
+    const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+    const [categories, setCategories] = useState([]);
     // Store the list of Staff users and assignment loading state
     const [staffUsers, setStaffUsers] = useState([]);
     const [assigningComplaintId, setAssigningComplaintId] = useState(null);
@@ -28,13 +36,71 @@ function ComplaintGrid({
         }
     }, [userRole]);
 
+    // Fetch categories from backend
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get("categories/");
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Failed to fetch categories:", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
     const handleView = (complaint) => {
         setSelectedComplaint(complaint);
+        setShowFeedbackForm(false);
+        setFeedbackSubmitted(false);
+
+        if (userRole === "USER" && complaint.status === "Resolved") {
+            checkExistingFeedback(complaint.id);
+        }
     };
 
     const handleEdit = (complaint) => {
         console.log("Editing:", complaint);
         setEditingComplaint(complaint);
+    };
+
+    const handleSubmitFeedback = async () => {
+
+        if (!feedbackData.rating || !feedbackData.service_experience) {
+            alert("Please select both ratings.");
+            return;
+        }
+
+        try {
+            const response = await api.post("feedback/", {
+                complaint: selectedComplaint.id,
+                rating: feedbackData.rating,
+                service_experience: feedbackData.service_experience,
+                comments: feedbackData.comments
+            });
+
+            alert(response.data.message);
+
+            setFeedbackData({
+                rating: 0,
+                service_experience: 0,
+                comments: ""
+            });
+
+            setShowFeedbackForm(false);
+            setSelectedComplaint(null);
+
+        } catch (error) {
+            console.error("Feedback submission failed:", error);
+
+            alert(
+                error.response?.data?.error ||
+                error.response?.data?.detail ||
+                JSON.stringify(error.response?.data) ||
+                "Failed to submit feedback."
+            );
+        }
     };
 
     
@@ -187,6 +253,19 @@ function ComplaintGrid({
         }
     };
 
+    const checkExistingFeedback = async (complaintId) => {
+        try {
+            const response = await api.get(
+                `feedback/check/${complaintId}/`
+            );
+
+            setFeedbackSubmitted(response.data.submitted);
+
+        } catch (error) {
+            console.error("Failed to check feedback:", error);
+        }
+    };
+
 
   return (
     <div className="complaint-grid">
@@ -330,7 +409,7 @@ function ComplaintGrid({
             </table>
 
             {/*view  modal popup */}
-            {selectedComplaint && (
+            {selectedComplaint && !showFeedbackForm &&(
                 <div className="complaint-modal">
 
                     <div className="complaint-modal-content">
@@ -418,8 +497,136 @@ function ComplaintGrid({
 
                         </div>
 
+                        {userRole === "USER" &&
+                            selectedComplaint.status === "Resolved" && (
+                                <div className="feedback-action">
+                                    {feedbackSubmitted ? (
+                                        <button className="feedback-submitted-btn" disabled>
+                                            ✓ Feedback Submitted
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="feedback-btn"
+                                            onClick={() => setShowFeedbackForm(true)}
+                                        >
+                                            ★ Give Feedback
+                                        </button>
+                                    )}
+                                </div>
+                        )}
+
                     </div>
 
+                </div>
+            )}
+            {/* Separate Feedback Modal */}
+            {showFeedbackForm && selectedComplaint && (
+                <div className="complaint-modal">
+
+                    <div className="complaint-modal-content feedback-modal-content">
+
+                        <div className="modal-header">
+                            <h2>Share Your Feedback</h2>
+
+                            <button
+                                className="modal-close"
+                                onClick={() => setShowFeedbackForm(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <p>
+                            Complaint #{selectedComplaint.id} – {selectedComplaint.title}
+                        </p>
+
+                        {/* Overall Rating */}
+                        <div className="feedback-field">
+                            <label>Overall Rating</label>
+
+                            <div className="star-rating">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <span
+                                        key={star}
+                                        onClick={() =>
+                                            setFeedbackData({
+                                                ...feedbackData,
+                                                rating: star
+                                            })
+                                        }
+                                        style={{
+                                            color: star <= feedbackData.rating
+                                                ? "#f5b51b"
+                                                : "#ccc",
+                                            cursor: "pointer",
+                                            fontSize: "28px"
+                                        }}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Service Experience */}
+                        <div className="feedback-field">
+                            <label>Service Experience</label>
+
+                            <div className="experience-rating">
+                                {[
+                                    { value: 1, emoji: "☹️", label: "Very Poor" },
+                                    { value: 2, emoji: "🙁", label: "Poor" },
+                                    { value: 3, emoji: "😐", label: "Average" },
+                                    { value: 4, emoji: "🙂", label: "Good" },
+                                    { value: 5, emoji: "😊", label: "Excellent" }
+                                ].map((item) => (
+                                    <button
+                                        type="button"
+                                        key={item.value}
+                                        className={
+                                            feedbackData.service_experience === item.value
+                                                ? "experience-selected"
+                                                : ""
+                                        }
+                                        onClick={() =>
+                                            setFeedbackData({
+                                                ...feedbackData,
+                                                service_experience: item.value
+                                            })
+                                        }
+                                    >
+                                        <span>{item.emoji}</span>
+                                        <small>{item.label}</small>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Comments */}
+                        <div className="feedback-field">
+                            <label>Comments</label>
+
+                            <textarea
+                                placeholder="Share your experience..."
+                                value={feedbackData.comments}
+                                onChange={(e) =>
+                                    setFeedbackData({
+                                        ...feedbackData,
+                                        comments: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        {/* Submit */}
+                        <button
+                            className="feedback-submit-btn"
+                            onClick={handleSubmitFeedback}
+                        >
+                            Submit Feedback
+                        </button>
+
+                    </div>
                 </div>
             )}
 
@@ -469,15 +676,17 @@ function ComplaintGrid({
                                     value={editingComplaint.category}
                                     disabled={userRole === "STAFF"}
                                     onChange={(e) =>
-                                    setEditingComplaint({
-                                        ...editingComplaint,
-                                        category: e.target.value
-                                    })
+                                        setEditingComplaint({
+                                            ...editingComplaint,
+                                            category: Number(e.target.value)
+                                        })
                                     }
                                 >
-                                    <option value="1">Electrical</option>
-                                    <option value="2">Plumbing</option>
-                                    <option value="3">Housekeeping</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.category_name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             
